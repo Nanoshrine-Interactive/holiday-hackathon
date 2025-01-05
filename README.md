@@ -1,70 +1,102 @@
-# Lens Holiday Hackathon
+<a href="https://docs.family.co/connectkit">
+  <img width="1080" alt="connectkit" src="https://github.com/family/connectkit/assets/1930210/87c2e868-3228-44b8-82c3-a38adf6d1bbf">
+</a>
 
-The Lens Holiday Hackathon is an opportunity to build innovative projects on Lens Network, compete for prizes, and showcase your work to the Lens community.
 
-### Key Dates
 
-- **Kickoff:** December 16th, 2024 at 4pm CET
-- **Submission Deadline:** January 7th, 2025 at 4pm CET
-- **Voting/Judging Period:** January 7th, 2025 at 4pm CET – January 12th, 2025 at 4pm CET
+# ConnectKit
 
-### Tracks and Themes
+ConnectKit is a powerful [React](https://reactjs.org/) component library for connecting a wallet to your dApp. It supports the most popular connectors and chains out of the box and provides a beautiful, seamless experience.
 
-Lens network is a high performance chain, built for SocialFi use cases, currently on testnet. For this holiday hackathon, Lens are inviting all developers to hack on the network.
+## Features
 
-Any application deployed to [Lens Network Testnet](https://dev-preview.lens.xyz/docs/network/overview) and using [Family’s Connect Kit](https://docs.family.co/connectkit) when possible. Potential ideas include:
+- 💡 TypeScript Ready — Get types straight out of the box.
+- 🌱 Ecosystem Standards — Uses top libraries such as [wagmi](https://github.com/wagmi-dev/wagmi).
+- 🖥️ Simple UX — Give users a simple, attractive experience.
+- 🎨 Beautiful Themes — Predesigned themes or full customization.
 
-- Social/SocialFi apps using features like Feeds, Social Graphs, etc.
-- Meme-adjacent projects
-- Public goods
-- Games
-- AI agents and products
+and much more...
 
-### Prizes
+## Quick Start
 
-- **1st Prize:** 20,000 GHO
-- **2nd Prize:** 10,000 GHO
-- **3rd Prize:** 5,000 GHO
-- **Honorary Mentions (x5):** 3,000 GHO
+Get started with a ConnectKit + [wagmi](https://wagmi.sh/) + [viem](https://viem.sh) project by running one of the following in your terminal:
 
-### Rules
+#### npm
 
-1. Build on [Lens Network Testnet](https://dev-preview.lens.xyz/docs/network/overview), use [ConnectKit](https://github.com/family/connectkit) where applicable. Get $GRASS Testnet Tokens [here](https://dev-preview.lens.xyz/docs/network/tools/faucets).
-2. For troubleshooting, write to us on Telegram.
-3. The maximum number of hackers per team is 4.
-4. Submissions should be open source and built using the Lens network on Testnet. Code must be new, starting on December 16th, 2024 at 4pm CET. Any other submissions will not be considered.
-5. Submissions with commits after the deadline of January 7th, 2025 at 4pm CET will be disqualified.
-6. Teams must submit their projects for review via:
-   1. Lens Holiday Hackathon GitHub, by following [these steps](#submit-your-project).
-   2. [Jokerace Entry](https://jokerace.io/contest/polygon/0x552bdf3d0acfa0bc398607fd675d3b4cce6aabdf). Submissions that are not in Jokerace won’t be able to be voted, therefore disqualified.
-7. Final submission must include:
-   1. Clear and concise README.
-   2. Prototype app.
-   3. Demo video / slide deck (you are welcomed to anonymize your voice / be camera off).
-8. Projects must adhere to the hackathon terms of service.
+```sh
+npx create-react-app my-app --template cra-template-connectkit
+```
 
-### Submit Your Project
+#### yarn
 
-1. **Fork and Submit a PR:**
-   - Fork the Lens Holiday Hackathon repository.
-   - Create a new Markdown (.md) file for your project submission with the format below.
-   - Commit and push your submission file to your fork repo.
-   - Submit a pull request with your project.
+```sh
+yarn create react-app my-app --template cra-template-connectkit
+```
 
-[Here](https://jarv.is/notes/how-to-pull-request-fork-github/) is a tutorial with steps to Fork and Submit a PR.
+#### pnpm
 
-2. **PR Format:**
-   - **Project Name:**
-   - **Team Members:** (Name and Lens Handle)
-   - **Project Description:**
-   - **Source Code Link:**
-   - **Preview Link (Optional):**
-   - **Demo Video/Slide Deck Link (Optional):**
-   - **Screenshots (Optional):**
+```sh
+pnpm dlx create-react-app ./my-app --template cra-template-connectkit
+```
 
-### Troubleshooting:
+## Documentation
 
-1. You can ask the community and the Lens devs questions by writing on our [Telegram](http://t.me/lensdevs).
-2. Ask in public, in the Hackathons channel. Neither devs nor the community will answer via DM.
-3. Share what you’re building with others. Building the same thing as another team? Merge teams! Anything goes as long as what you build is amazing.
-4. Be kind, respectful and patient. Some days might be slower on responses than others, as we are also on a holiday week.
+You can find the full ConnectKit documentation in the Family docs [here](https://docs.family.co/connectkit).
+
+## API Reference
+
+You can find the full API Reference in the Family docs [here](https://docs.family.co/connectkit/api-reference).
+
+## Examples
+
+There are various runnable examples included in this repository in the [examples folder](https://github.com/family/connectkit/tree/main/examples):
+
+- [Create React App Example (TypeScript)](https://github.com/family/connectkit/tree/main/examples/cra)
+- [Next.js Example (TypeScript)](https://github.com/family/connectkit/tree/main/examples/nextjs)
+- [Vite Example (TypeScript)](https://github.com/family/connectkit/tree/main/examples/vite)
+
+### Try in CodeSandbox
+
+You can try out some ConnectKit examples directly in your browser through CodeSandbox:
+
+- [Create React App Example (TypeScript)](https://codesandbox.io/s/5rhqm0?file=/README.md)
+- [Next.js (TypeScript)](https://codesandbox.io/s/qnvyqe?file=/README.md)
+- [Vite Example (TypeScript)](https://codesandbox.io/s/4jtssh?file=/README.md)
+
+### Running Examples Locally
+
+Clone the ConnectKit project and install the necessary dependencies:
+
+```sh
+$ git clone git@github.com:family/connectkit.git
+$ cd connectkit
+$ yarn install
+```
+
+and start the code bundler:
+
+```sh
+$ yarn dev:connectkit
+$ yarn dev:connectkit-next-siwe
+```
+
+and then simply select the example you'd like to run:
+
+```sh
+$ yarn dev:vite # Vite
+$ yarn dev:nextjs # Next.js
+$ yarn dev:nextjs-siwe # Next.js with SIWE
+$ yarn dev:cra # Create React App
+```
+
+## Contribute
+
+Before starting on anything, please have a read through our [Contribution Guidelines](https://github.com/family/connectkit/blob/main/CONTRIBUTING.md).
+
+## Twitter
+
+Follow [@family](https://twitter.com/family) on Twitter for the latest updates on ConnectKit.
+
+## License
+
+See [LICENSE](https://github.com/family/connectkit/blob/main/LICENSE) for more information.
