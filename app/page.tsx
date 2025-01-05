@@ -1,49 +1,33 @@
-'use client';
+'use client'
 
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { ConnectKitButton } from 'connectkit';
+import { useAccount } from 'wagmi'
+import { LensAuth } from './components/LensAuth'
+import { CreatePost } from './components/CreatePost'
+import { useSIWE } from 'connectkit'
 
 function App() {
-  const account = useAccount();
-  const { connectors, connect, status, error } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { isConnected } = useAccount()
+  const { isSignedIn } = useSIWE()
 
   return (
-    <>
-      <div>
-        <h2>Account</h2>
-        <ConnectKitButton />
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">Lens Protocol Demo</h1>
 
-        <div>
-          status: {account.status}
-          <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
-          chainId: {account.chainId}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Authentication</h2>
+        <LensAuth />
+      </div>
+
+      {/* Only show CreatePost when wallet is connected and SIWE is complete */}
+      {isConnected && isSignedIn && (
+        <div className="mb-8">
+          <h1>Logged in!</h1>
+          <h2 className="text-xl font-semibold mb-4">Create Post</h2>
+          <CreatePost />
         </div>
-
-        {account.status === 'connected' && (
-          <button type="button" onClick={() => disconnect()}>
-            Disconnect
-          </button>
-        )}
-      </div>
-      <div>
-        <h2>Connect</h2>
-        {connectors.map((connector) => (
-          <button
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-            type="button"
-          >
-            {connector.name}
-          </button>
-        ))}
-        <div>{status}</div>
-        <div>{error?.message}</div>
-      </div>
-    </>
-  );
+      )}
+    </div>
+  )
 }
 
-export default App;
+export default App
