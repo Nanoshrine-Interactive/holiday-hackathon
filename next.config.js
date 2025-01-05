@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   webpack: (config) => {
-    config.externals.push('pino-pretty', 'framer-motion')
+    config.externals.push('pino-pretty')
     return config
   }
 }

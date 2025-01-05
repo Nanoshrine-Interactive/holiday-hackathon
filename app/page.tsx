@@ -1,35 +1,32 @@
 'use client'
 
 import { useAccount } from 'wagmi'
+import { ConnectKitButton } from 'connectkit'
 import { LensAuth } from './components/LensAuth'
-import { CreatePost } from './components/CreatePost'
-import { useSIWE } from 'connectkit'
 
 function App() {
-  const { isConnected } = useAccount()
-  const { isSignedIn } = useSIWE()
+  const account = useAccount()
+  console.log('App component wallet status:', account)
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Lens Protocol Demo</h1>
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold">Account</h2>
+        <ConnectKitButton />
 
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Authentication</h2>
-      </div>
+        <div className="text-sm">
+          <div>status: {account.status}</div>
+          <div>addresses: {JSON.stringify(account.addresses)}</div>
+          <div>chainId: {account.chainId}</div>
+        </div>
 
-      <h3>blah</h3>
-
-      {/* Only show CreatePost when wallet is connected and SIWE is complete */}
-      {isConnected && isSignedIn && (
-        <>
-          <LensAuth />
-          <div className="mb-8">
-            <h1>Logged in!</h1>
-            <h2 className="text-xl font-semibold mb-4">Create Post</h2>
-            <CreatePost />
+        {account.status === 'connected' && (
+          <div>
+            <h2 className="text-xl font-bold mt-8 mb-4">Lens Protocol</h2>
+            <LensAuth />
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   )
 }

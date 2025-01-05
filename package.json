@@ -9,13 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@lens-network/sdk": "^0.0.0-canary-20241203140504",
     "@lens-protocol/client": "^0.0.0-canary-20250102162746",
     "@lens-protocol/metadata": "^2.0.0-next.2",
     "@lens-protocol/storage-node-client": "^0.0.0-next-20241217195719",
     "@tanstack/react-query": "^5.17.15",
     "connectkit": "1.8.2",
     "connectkit-next-siwe": "^0.3.0",
+    "framer-motion": "^10.18.0",
     "next": "14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
