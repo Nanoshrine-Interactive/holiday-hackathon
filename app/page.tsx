@@ -15,16 +15,20 @@ function App() {
 
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Authentication</h2>
-        <LensAuth />
       </div>
+
+      <h3>blah</h3>
 
       {/* Only show CreatePost when wallet is connected and SIWE is complete */}
       {isConnected && isSignedIn && (
-        <div className="mb-8">
-          <h1>Logged in!</h1>
-          <h2 className="text-xl font-semibold mb-4">Create Post</h2>
-          <CreatePost />
-        </div>
+        <>
+          <LensAuth />
+          <div className="mb-8">
+            <h1>Logged in!</h1>
+            <h2 className="text-xl font-semibold mb-4">Create Post</h2>
+            <CreatePost />
+          </div>
+        </>
       )}
     </div>
   )
