@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAccount, useSignMessage, useWalletClient } from 'wagmi'
 import { lensTestnet } from '@/config'
 import { lensClient } from '@/utils/lensClient'
@@ -32,6 +32,7 @@ export function CreatePost({ profileId, onSuccess, onError }: CreatePostProps) {
   const { data: walletClient } = useWalletClient()
   const [isPosting, setIsPosting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const { signMessageAsync } = useSignMessage()
   const [formData, setFormData] = useState<PostFormData>({
     content: '',
@@ -54,6 +55,19 @@ export function CreatePost({ profileId, onSuccess, onError }: CreatePostProps) {
       media: file
     }))
   }
+
+  // Add a method to clear success message after a certain time
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout
+    if (successMessage) {
+      timeoutId = setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [successMessage])
 
   // Main post creation handler
   const handleCreatePost = async () => {
@@ -146,6 +160,7 @@ export function CreatePost({ profileId, onSuccess, onError }: CreatePostProps) {
       // Reset form and call success callback
       setFormData({ content: '', media: null })
       setIsPosting(false)
+      setSuccessMessage('Post created successfully!')
       onSuccess?.()
     } catch (error) {
       console.error('Failed to create post:', error)
@@ -201,6 +216,8 @@ export function CreatePost({ profileId, onSuccess, onError }: CreatePostProps) {
             'Create Post'
           )}
         </button>
+
+        {successMessage && <div className="success-banner">{successMessage}</div>}
       </div>
     </div>
   )
