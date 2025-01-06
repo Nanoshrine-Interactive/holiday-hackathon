@@ -11,6 +11,8 @@ import {
 import { CreatePost } from './CreatePost'
 import CreateLensProfile from './CreateLensProfile'
 import { EditProfile } from './EditLensProfile'
+import { storageClient } from '@/utils/storageClient'
+import { UserPostFeed } from './UserPostFeed'
 
 type AuthStatus = 'idle' | 'checking' | 'signing' | 'loading' | 'error'
 
@@ -24,8 +26,9 @@ export function LensAuth() {
   const [accounts, setAccounts] = useState<AccountMetadata[]>([])
   const [selectedAccount, setSelectedAccount] = useState<AccountMetadata | null>(null)
   const [loadingAccountId, setLoadingAccountId] = useState<string | null>(null)
+  const [showCreateProfile, setShowCreateProfile] = useState(false)
 
-  // Clear all auth state
+  // Existing clear auth state function
   const clearAuthState = useCallback(() => {
     setIsAuthenticated(false)
     setSessionClient(null)
@@ -36,7 +39,7 @@ export function LensAuth() {
     }
   }, [])
 
-  // Check wallet connection changes
+  // Existing wallet connection effect
   useEffect(() => {
     if (walletStatus !== 'connected') {
       clearAuthState()
@@ -50,6 +53,7 @@ export function LensAuth() {
     }
 
     setStatus('checking')
+    setShowCreateProfile(false)
 
     try {
       const accountsResult = await fetchAccountsAvailable(lensClient, {
@@ -64,22 +68,44 @@ export function LensAuth() {
           })
 
           if (!accountResult.isErr() && accountResult.value !== null) {
-            const metadata = accountResult.value.metadata
+            const account = accountResult.value
+            console.log('Account data:', account)
+
             return {
               __typename: 'AccountMetadata' as const,
-              attributes: metadata?.attributes || [],
-              bio: metadata?.bio || null,
-              coverPicture: metadata?.coverPicture || null,
-              id: accountResult.value.address, // Use the account address as ID
-              name: metadata?.name || null,
-              picture: metadata?.picture || null
-            } as AccountMetadata
+              attributes: account.metadata?.attributes || [],
+              bio: account.metadata?.bio || null,
+              coverPicture: account.metadata?.coverPicture || null,
+              id: account.address,
+              name: account.metadata?.name || null,
+              picture: account.metadata?.picture || null,
+              // Add additional fields from account data
+              handle: account.username?.localName || null,
+              score: account.score,
+              createdAt: account.createdAt,
+              isFollowedByMe: account.operations?.isFollowedByMe || false,
+              isFollowingMe: account.operations?.isFollowingMe || false,
+              isMutedByMe: account.operations?.isMutedByMe || false,
+              isBlockedByMe: account.operations?.isBlockedByMe || false,
+              owner: account.owner
+            }
           }
           return null
         })
 
         const resolvedAccounts = (await Promise.all(accountPromises)).filter(
-          (account): account is AccountMetadata => account !== null
+          (
+            account
+          ): account is AccountMetadata & {
+            handle: string | null
+            score: number
+            createdAt: string
+            isFollowedByMe: boolean
+            isFollowingMe: boolean
+            isMutedByMe: boolean
+            isBlockedByMe: boolean
+            owner: string
+          } => account !== null
         )
 
         setAccounts(resolvedAccounts)
@@ -92,11 +118,18 @@ export function LensAuth() {
     }
   }, [address, walletStatus])
 
+  // Initial accounts check
   useEffect(() => {
     checkAccounts()
   }, [checkAccounts])
 
-  // Handle account selection and automatic login
+  // Handle successful profile creation
+  const handleProfileCreated = async () => {
+    setShowCreateProfile(false)
+    await checkAccounts()
+  }
+
+  // Existing account selection handler
   const handleAccountSelect = async (account: AccountMetadata) => {
     if (!address) return
     setStatus('signing')
@@ -117,7 +150,7 @@ export function LensAuth() {
       // If resume fails, create new session
       const loginParams = {
         accountOwner: {
-          account: account.id, // Using account.id which contains the address
+          account: account.id,
           app: '0xe5439696f4057aF073c0FB2dc6e5e755392922e1',
           owner: evmAddress(address)
         }
@@ -145,6 +178,7 @@ export function LensAuth() {
     }
   }
 
+  // Existing logout handler
   const handleLogout = async () => {
     if (!sessionClient) return
     setStatus('loading')
@@ -170,27 +204,41 @@ export function LensAuth() {
     }
   }
 
-  const handleProfileCreated = async () => {
-    await checkAccounts()
-  }
-
   const isLoading = status === 'checking' || status === 'signing' || status === 'loading'
 
   if (walletStatus !== 'connected') {
     return null
   }
 
+  // Show create profile view
+  if (showCreateProfile) {
+    return (
+      <div className="space-y-4">
+        <button
+          onClick={() => setShowCreateProfile(false)}
+          className="mb-4 text-purple-600 hover:text-purple-700 flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              fillRule="evenodd"
+              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Back to Account Selection
+        </button>
+        <CreateLensProfile onSuccess={handleProfileCreated} onError={(error) => setError(error.message)} />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-4">
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
-      {accounts.length === 0 && (
-        <CreateLensProfile onSuccess={handleProfileCreated} onError={(error) => setError(error.message)} />
-      )}
-
       {accounts.length > 0 && !selectedAccount && (
         <div className="border rounded p-4">
-          <h3 className="font-medium mb-2">Select your Lens account:</h3>
+          <h3 className="font-medium mb-4">Select your Lens account:</h3>
           <div className="space-y-2">
             {accounts.map((account) => (
               <button
@@ -225,16 +273,43 @@ export function LensAuth() {
                   </div>
                 ) : (
                   <>
-                    {account?.picture && <img src={account.picture} alt="Profile" className="w-8 h-8 rounded-full" />}
+                    {account?.picture && (
+                      <img
+                        src={storageClient.resolve(account.picture)}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    )}
                     <div className="text-left">
-                      <div>{account?.name || account?.id || 'Unnamed Account'}</div>
-                      <div className="text-sm text-gray-500">{account.id}</div>
+                      <div className="font-medium">{account?.name || 'Unnamed Account'}</div>
+                      {/* @ts-ignore */}
+                      {account.id && <div className="text-sm text-gray-600">@{account.handle}</div>}
+                      {account.bio && <div className="text-sm text-gray-500 line-clamp-2">{account.bio}</div>}
+                      <div className="text-xs text-gray-400 mt-1">
+                        {/* @ts-ignore */}
+                        Created {new Date(account.createdAt).toLocaleDateString()}
+                      </div>
                     </div>
                   </>
                 )}
               </button>
             ))}
           </div>
+
+          {/* Create New Profile Button */}
+          <button
+            onClick={() => setShowCreateProfile(true)}
+            className="mt-4 w-full p-2 border-2 border-dashed border-purple-300 hover:border-purple-400 rounded-lg text-purple-600 hover:text-purple-700 flex items-center justify-center gap-2 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Create New Profile
+          </button>
         </div>
       )}
 
@@ -243,7 +318,11 @@ export function LensAuth() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3">
               {selectedAccount?.picture && (
-                <img src={selectedAccount.picture} alt="Profile" className="w-10 h-10 rounded-full" />
+                <img
+                  src={storageClient.resolve(selectedAccount.picture)}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full"
+                />
               )}
               <div>
                 <div className="font-medium">{selectedAccount?.name || selectedAccount.id || 'Unnamed Account'}</div>
@@ -298,7 +377,23 @@ export function LensAuth() {
 
           <div className="mt-6">
             <h3 className="text-lg font-medium mb-4">Create Post</h3>
-            <CreatePost />
+            <CreatePost
+              profileId={selectedAccount.id}
+              onSuccess={() => {
+                // Optional: You can add any success handling logic here
+                console.log('Post created successfully')
+              }}
+              onError={(error) => {
+                // Optional: Handle any errors during post creation
+                setError(error.message)
+              }}
+            />
+            UserPostFeed
+          </div>
+
+          <div className="mt-6">
+            <h3 className="text-lg font-medium mb-4">Create Post</h3>
+            <UserPostFeed profileId={selectedAccount.id} />
           </div>
         </>
       )}

@@ -6,6 +6,7 @@ import { evmAddress } from '@lens-protocol/client'
 import { createAccountWithUsername } from '@lens-protocol/client/actions'
 import { handleWith } from '@lens-protocol/client/viem'
 import { ProfileFormFields, type ProfileFormData } from './ProfileFormFields'
+import { account } from '@lens-protocol/metadata'
 
 interface CreateLensProfileProps {
   onSuccess?: () => void
@@ -50,19 +51,24 @@ export function CreateLensProfile({ onSuccess, onError }: CreateLensProfileProps
 
       const sessionClient = loginResult.value
 
-      // Prepare metadata
-      const metadata = {
-        name: formData.name,
-        bio: formData.bio,
-        picture: null as string | null,
-        attributes: []
+      // Handle profile picture upload first
+      let pictureUri: string | undefined = undefined
+      if (formData.picture) {
+        try {
+          const imageResult = await storageClient.uploadFile(formData.picture)
+          pictureUri = imageResult.uri
+        } catch (error) {
+          console.error('Failed to upload profile picture:', error)
+          // Continue without picture if upload fails
+        }
       }
 
-      if (formData.picture) {
-        // First upload the image
-        const imageResult = await storageClient.uploadFile(formData.picture)
-        metadata.picture = imageResult.uri
-      }
+      // Create metadata using the official Lens metadata helper
+      const metadata = account({
+        name: formData.name || undefined,
+        bio: formData.bio || undefined,
+        picture: pictureUri
+      })
 
       // Upload metadata
       const { uri } = await storageClient.uploadAsJson(metadata)
