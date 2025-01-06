@@ -26,10 +26,10 @@ export function ProfileFormFields({ data, onChange, isSubmitting, hideHandle = f
   }
 
   return (
-    <div className="space-y-4">
+    <div className="profile-form-container">
       {!hideHandle && (
-        <div>
-          <label htmlFor="handle" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="form-field">
+          <label htmlFor="handle" className="form-label">
             Handle
           </label>
           <input
@@ -39,16 +39,16 @@ export function ProfileFormFields({ data, onChange, isSubmitting, hideHandle = f
             value={data.handle}
             onChange={handleChange}
             placeholder="your-handle"
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="form-input"
             disabled={isSubmitting}
             required
           />
-          <p className="mt-1 text-xs text-gray-500">This will be your unique identifier on Lens</p>
+          <p className="form-hint">This will be your unique identifier on Lens</p>
         </div>
       )}
 
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="form-field">
+        <label htmlFor="name" className="form-label">
           Display Name
         </label>
         <input
@@ -58,13 +58,13 @@ export function ProfileFormFields({ data, onChange, isSubmitting, hideHandle = f
           value={data.name}
           onChange={handleChange}
           placeholder="Your Name"
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          className="form-input"
           disabled={isSubmitting}
         />
       </div>
 
-      <div>
-        <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="form-field">
+        <label htmlFor="bio" className="form-label">
           Bio
         </label>
         <textarea
@@ -74,13 +74,13 @@ export function ProfileFormFields({ data, onChange, isSubmitting, hideHandle = f
           onChange={handleChange}
           placeholder="Tell us about yourself"
           rows={3}
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          className="form-input"
           disabled={isSubmitting}
         />
       </div>
 
-      <div>
-        <label htmlFor="picture" className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="form-field">
+        <label htmlFor="picture" className="form-label">
           Profile Picture
         </label>
         <input
@@ -89,7 +89,7 @@ export function ProfileFormFields({ data, onChange, isSubmitting, hideHandle = f
           name="picture"
           onChange={handleFileChange}
           accept="image/*"
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          className="form-input file-input"
           disabled={isSubmitting}
         />
       </div>

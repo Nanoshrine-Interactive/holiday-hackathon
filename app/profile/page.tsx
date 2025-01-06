@@ -2,7 +2,7 @@
 
 import { useAccount } from 'wagmi'
 import { ConnectKitButton } from 'connectkit'
-import { LensAuth } from './components/LensAuth'
+import { LensAuth } from '../components/LensAuth'
 
 function App() {
   const account = useAccount()
@@ -17,9 +17,10 @@ function App() {
           <ConnectKitButton />
         </div>
       )}
+
       {account.status === 'connected' && (
         <div className="lens-app-section">
-          <h2 className="lens-app-title">NSI :: App</h2>
+          <h2 className="lens-app-title">NSI :: Test</h2>
           <LensAuth />
         </div>
       )}

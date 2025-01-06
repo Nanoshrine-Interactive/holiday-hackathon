@@ -4,8 +4,8 @@ import '../styles/globals.css'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
-  title: 'ConnectKit Next.js Example',
-  description: 'By Family'
+  title: 'NSI :: Lens',
+  description: 'TDB'
 }
 
 export default function RootLayout(props: { children: ReactNode }) {

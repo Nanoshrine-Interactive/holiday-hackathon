@@ -27,6 +27,7 @@ export function LensAuth() {
   const [selectedAccount, setSelectedAccount] = useState<AccountMetadata | null>(null)
   const [loadingAccountId, setLoadingAccountId] = useState<string | null>(null)
   const [showCreateProfile, setShowCreateProfile] = useState(false)
+  const [activeTab, setActiveTab] = useState<'feed' | 'post' | 'edit'>('feed')
 
   // Existing clear auth state function
   const clearAuthState = useCallback(() => {
@@ -213,11 +214,8 @@ export function LensAuth() {
   // Show create profile view
   if (showCreateProfile) {
     return (
-      <div className="space-y-4">
-        <button
-          onClick={() => setShowCreateProfile(false)}
-          className="mb-4 text-purple-600 hover:text-purple-700 flex items-center gap-2"
-        >
+      <div className="lens-auth-container">
+        <button onClick={() => setShowCreateProfile(false)} className="create-profile-button">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path
               fillRule="evenodd"
@@ -233,38 +231,25 @@ export function LensAuth() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+    <div className="lens-auth-container">
+      {error && <p className="error-message">{error}</p>}
 
       {accounts.length > 0 && !selectedAccount && (
-        <div className="border rounded p-4">
-          <h3 className="font-medium mb-4">Select your Lens account:</h3>
-          <div className="space-y-2">
+        <div className="account-selection-container">
+          <h3 className="account-selection-title">Select your Lens account:</h3>
+          <div className="account-list">
             {accounts.map((account) => (
               <button
                 key={account.id}
                 onClick={() => handleAccountSelect(account)}
-                className="w-full flex items-center gap-3 p-2 hover:bg-gray-100 rounded"
+                className="account-button"
                 disabled={isLoading}
               >
                 {isLoading && account.id === loadingAccountId ? (
-                  <div className="flex items-center gap-2">
-                    <svg
-                      className="animate-spin h-4 w-4 text-purple-600"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
+                  <div className="account-button-loading">
+                    <svg className="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path
-                        className="opacity-75"
                         fill="currentColor"
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
@@ -274,18 +259,14 @@ export function LensAuth() {
                 ) : (
                   <>
                     {account?.picture && (
-                      <img
-                        src={storageClient.resolve(account.picture)}
-                        alt="Profile"
-                        className="w-8 h-8 rounded-full"
-                      />
+                      <img src={storageClient.resolve(account.picture)} alt="Profile" className="profile-image" />
                     )}
-                    <div className="text-left">
-                      <div className="font-medium">{account?.name || 'Unnamed Account'}</div>
+                    <div className="profile-details">
+                      <div className="profile-name">{account?.name || 'Unnamed Account'}</div>
                       {/* @ts-ignore */}
-                      {account.id && <div className="text-sm text-gray-600">@{account.handle}</div>}
-                      {account.bio && <div className="text-sm text-gray-500 line-clamp-2">{account.bio}</div>}
-                      <div className="text-xs text-gray-400 mt-1">
+                      {account.id && <div className="profile-handle">@{account.handle}</div>}
+                      {account.bio && <div className="profile-bio">{account.bio}</div>}
+                      <div className="profile-created-date">
                         {/* @ts-ignore */}
                         Created {new Date(account.createdAt).toLocaleDateString()}
                       </div>
@@ -297,10 +278,7 @@ export function LensAuth() {
           </div>
 
           {/* Create New Profile Button */}
-          <button
-            onClick={() => setShowCreateProfile(true)}
-            className="mt-4 w-full p-2 border-2 border-dashed border-purple-300 hover:border-purple-400 rounded-lg text-purple-600 hover:text-purple-700 flex items-center justify-center gap-2 transition-colors"
-          >
+          <button onClick={() => setShowCreateProfile(true)} className="create-profile-button">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
@@ -315,83 +293,88 @@ export function LensAuth() {
 
       {isAuthenticated && selectedAccount && (
         <>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-3">
+          <div className="authenticated-profile-container">
+            <div className="authenticated-profile-header">
               {selectedAccount?.picture && (
                 <img
                   src={storageClient.resolve(selectedAccount.picture)}
                   alt="Profile"
-                  className="w-10 h-10 rounded-full"
+                  className="authenticated-profile-image"
                 />
               )}
               <div>
-                <div className="font-medium">{selectedAccount?.name || selectedAccount.id || 'Unnamed Account'}</div>
-                <div className="text-sm text-gray-500">{selectedAccount.id}</div>
+                <div className="authenticated-profile-name">
+                  {selectedAccount?.name || selectedAccount.id || 'Unnamed Account'}
+                </div>
+                {/* @ts-ignore */}
+                <div className="authenticated-profile-id">@{selectedAccount.handle}</div>
               </div>
+              <button onClick={handleLogout} disabled={isLoading} className="logout-button">
+                {status === 'loading' ? (
+                  <span className="account-button-loading">
+                    <svg className="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Logging out...
+                  </span>
+                ) : (
+                  'Logout from Lens'
+                )}
+              </button>
             </div>
 
-            <EditProfile
-              currentProfile={{
-                name: selectedAccount.name,
-                bio: selectedAccount.bio,
-                id: selectedAccount.id
-              }}
-              onSuccess={checkAccounts}
-              onError={(error) => setError(error.message)}
-            />
+            <div className="tabs-container">
+              <button
+                className={`tab-button ${activeTab === 'feed' ? 'active' : ''}`}
+                onClick={() => setActiveTab('feed')}
+              >
+                Feed
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'post' ? 'active' : ''}`}
+                onClick={() => setActiveTab('post')}
+              >
+                Create Post
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
+                onClick={() => setActiveTab('edit')}
+              >
+                Edit Profile
+              </button>
+            </div>
 
-            <button
-              onClick={handleLogout}
-              disabled={isLoading}
-              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-2"
-            >
-              {status === 'loading' ? (
-                <span className="flex items-center gap-2">
-                  <svg
-                    className="animate-spin h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Logging out...
-                </span>
-              ) : (
-                'Logout from Lens'
+            <div className="tab-content">
+              {activeTab === 'feed' && <UserPostFeed profileId={selectedAccount.id} />}
+
+              {activeTab === 'post' && (
+                <CreatePost
+                  profileId={selectedAccount.id}
+                  onSuccess={() => {
+                    console.log('Post created successfully')
+                  }}
+                  onError={(error) => {
+                    setError(error.message)
+                  }}
+                />
               )}
-            </button>
-          </div>
 
-          <div className="mt-6">
-            <CreatePost
-              profileId={selectedAccount.id}
-              onSuccess={() => {
-                // Optional: You can add any success handling logic here
-                console.log('Post created successfully')
-              }}
-              onError={(error) => {
-                // Optional: Handle any errors during post creation
-                setError(error.message)
-              }}
-            />
-            UserPostFeed
-          </div>
-
-          <div className="mt-6">
-            <UserPostFeed profileId={selectedAccount.id} />
+              {activeTab === 'edit' && (
+                <EditProfile
+                  currentProfile={{
+                    name: selectedAccount.name,
+                    bio: selectedAccount.bio,
+                    id: selectedAccount.id
+                  }}
+                  onSuccess={checkAccounts}
+                  onError={(error) => setError(error.message)}
+                />
+              )}
+            </div>
           </div>
         </>
       )}

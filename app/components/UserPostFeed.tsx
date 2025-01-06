@@ -122,33 +122,39 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
   // Render individual post
   const renderPost = (post: Post) => {
     return (
-      <div key={post.id} className="border rounded-lg p-4 mb-4 bg-white shadow-sm">
+      <div key={post.id} className="post-box">
         {/* Author Info */}
-        <div className="flex items-center mb-3">
+        <div className="post-author-section">
           {post.author?.picture && (
             <img
               src={storageClient.resolve(post.author.picture.uri ?? '')}
               alt={post.author.name || 'Profile'}
-              className="w-10 h-10 rounded-full mr-3"
+              className="post-author-image"
             />
           )}
-          <div>
-            <div className="font-medium">{post.author?.handle || 'Unnamed Account'}</div>
-            {post.author?.handle && <div className="text-sm text-gray-500">@{post.author.handle}</div>}
-          </div>
+          <div>{post.author?.handle && <div className="post-author-handle">@{post.author.handle}</div>}</div>
         </div>
 
         {/* Post Content */}
-        {post.metadata?.content && <p className="mb-3 text-gray-800">{post.metadata.content}</p>}
+        {post.metadata?.content && <p className="post-content">{post.metadata.content}</p>}
 
         {/* Timestamp */}
-        <div className="text-xs text-gray-500 mb-3">{formatTimestamp(post.timestamp)}</div>
+        <div className="post-timestamp">{formatTimestamp(post.timestamp)}</div>
 
         {/* Post Stats */}
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>💬 {post.stats?.comments || 0} Comments</span>
-          <span>🔁 {post.stats?.reposts || 0} Reposts</span>
-          <span>❤️ {post.stats?.upvotes || 0} Likes</span>
+        <div className="post-stats">
+          <span className="post-stat-item">
+            <span className="post-stat-icon">💬</span>
+            {post.stats?.comments || 0} Comments
+          </span>
+          <span className="post-stat-item">
+            <span className="post-stat-icon">🔁</span>
+            {post.stats?.reposts || 0} Reposts
+          </span>
+          <span className="post-stat-item">
+            <span className="post-stat-icon">❤️</span>
+            {post.stats?.upvotes || 0} Likes
+          </span>
         </div>
       </div>
     )
@@ -163,24 +169,18 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
 
   // Render component
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-medium">Your Posts</h3>
+    <div className="post-feed-container">
+      <h3 className="post-feed-title">Your Posts</h3>
 
       {/* Error State */}
-      {error && <div className="text-red-500 text-center py-4">{error}</div>}
+      {error && <div className="post-feed-error">{error}</div>}
 
       {/* Loading State */}
       {isLoading && posts.length === 0 && (
-        <div className="flex justify-center items-center py-4">
-          <svg
-            className="animate-spin h-5 w-5 text-purple-600"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <div className="post-feed-loading">
+          <svg className="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path
-              className="opacity-75"
               fill="currentColor"
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
@@ -188,18 +188,16 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
         </div>
       )}
 
-      {/* Posts List */}
-      {!isLoading && posts.length === 0 && (
-        <div className="text-center text-gray-500 py-4">No posts yet. Create your first post!</div>
-      )}
+      {/* Empty State */}
+      {!isLoading && posts.length === 0 && <div className="post-feed-empty">No posts yet. Create your first post!</div>}
 
       {/* Render Posts */}
-      <div>{posts.map(renderPost)}</div>
+      <div className="posts-list">{posts.map(renderPost)}</div>
 
       {/* Load More Button */}
       {!isLoading && posts.length > 0 && hasMore && (
-        <div className="text-center">
-          <button onClick={handleLoadMore} className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+        <div className="load-more-container">
+          <button onClick={handleLoadMore} className="load-more-button">
             Load More Posts
           </button>
         </div>
