@@ -56,8 +56,7 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
         filter: {
           authors: [profileId]
         },
-        cursor: reset ? null : cursor,
-        pageSize: 10
+        cursor: reset ? null : cursor
       })
 
       if (result.isErr()) {
@@ -134,7 +133,7 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
             />
           )}
           <div>
-            <div className="font-medium">{post.author?.name || 'Unnamed Account'}</div>
+            <div className="font-medium">{post.author?.handle || 'Unnamed Account'}</div>
             {post.author?.handle && <div className="text-sm text-gray-500">@{post.author.handle}</div>}
           </div>
         </div>
@@ -159,6 +158,8 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
   const handleLoadMore = () => {
     fetchUserPosts()
   }
+
+  console.log(posts)
 
   // Render component
   return (

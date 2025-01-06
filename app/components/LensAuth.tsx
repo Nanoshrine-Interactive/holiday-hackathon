@@ -376,7 +376,6 @@ export function LensAuth() {
           </div>
 
           <div className="mt-6">
-            <h3 className="text-lg font-medium mb-4">Create Post</h3>
             <CreatePost
               profileId={selectedAccount.id}
               onSuccess={() => {
@@ -392,7 +391,6 @@ export function LensAuth() {
           </div>
 
           <div className="mt-6">
-            <h3 className="text-lg font-medium mb-4">Create Post</h3>
             <UserPostFeed profileId={selectedAccount.id} />
           </div>
         </>

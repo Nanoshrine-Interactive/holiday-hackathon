@@ -4,8 +4,7 @@ import { lensTestnet } from '@/config'
 import { lensClient } from '@/utils/lensClient'
 import { storageClient } from '@/utils/storageClient'
 import { textOnly } from '@lens-protocol/metadata'
-import { post } from '@lens-protocol/client/actions'
-import { handleWith } from '@lens-protocol/client/viem'
+import { post, fetchAccount } from '@lens-protocol/client/actions'
 import {
   evmAddress,
   Result,
