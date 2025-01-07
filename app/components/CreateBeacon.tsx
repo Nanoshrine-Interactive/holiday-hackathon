@@ -7,14 +7,19 @@ import { embed } from '@lens-protocol/metadata'
 import { post } from '@lens-protocol/client/actions'
 import { evmAddress, TxHash, TransactionIndexingError, UnexpectedError, ResultAsync } from '@lens-protocol/client'
 import { convertTestBeaconToString } from '@/utils/sceneConverter'
+import { Canvas } from '@react-three/fiber'
+import { CameraShake, OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei'
+import BeaconPreview from './BeaconPreview'
+import { Color } from 'three'
 
 interface CreateBeaconProps {
   profileId: string
+  handle: any
   onSuccess?: () => void
   onError?: (error: Error) => void
 }
 
-export function CreateBeacon({ profileId, onSuccess, onError }: CreateBeaconProps) {
+export function CreateBeacon({ profileId, handle, onSuccess, onError }: CreateBeaconProps) {
   const { address } = useAccount()
   const { data: walletClient } = useWalletClient()
   const [isPosting, setIsPosting] = useState(false)
@@ -35,6 +40,7 @@ export function CreateBeacon({ profileId, onSuccess, onError }: CreateBeaconProp
     }
   }, [successMessage])
 
+  // NOTE:: These external lib links could be on-chain instead!
   const createSceneHTML = () => {
     return `<!DOCTYPE html>
       <html>
@@ -152,31 +158,47 @@ export function CreateBeacon({ profileId, onSuccess, onError }: CreateBeaconProp
   }
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Create Beacon</h3>
+    <div className="create-beacon-container">
+      <h3 className="create-beacon-title">Create Beacon</h3>
 
-      {error && <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md">{error}</div>}
+      {/* Preview window */}
+      <div className="create-beacon-canvas">
+        <Canvas>
+          <PerspectiveCamera makeDefault position={[2, 1, 2]} />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          {/* @ts-ignore */}
+          <BeaconPreview handle={handle} />
+          <OrbitControls enableZoom={true} makeDefault />
 
-      <div className="space-y-4">
-        <div>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Add a description for your beacon..."
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-            rows={3}
+          <color attach="background" args={[new Color('#000000')]} />
+          <CameraShake
+            maxYaw={0.015}
+            maxPitch={0.015}
+            maxRoll={0.015}
+            yawFrequency={0.25 * 0.975}
+            pitchFrequency={0.25}
+            rollFrequency={0.25 * 0.9}
           />
-        </div>
+        </Canvas>
+      </div>
 
-        <button
-          onClick={handleCreateBeacon}
-          disabled={isPosting}
-          className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
+      {error && <div className="create-beacon-error">{error}</div>}
+
+      <div>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Add a description for your beacon..."
+          className="create-beacon-textarea"
+          rows={3}
+        />
+
+        <button onClick={handleCreateBeacon} disabled={isPosting} className="create-beacon-button">
           {isPosting ? 'Creating Beacon...' : 'Create Beacon'}
         </button>
 
-        {successMessage && <div className="p-3 text-sm text-green-700 bg-green-50 rounded-md">{successMessage}</div>}
+        {successMessage && <div className="create-beacon-success">{successMessage}</div>}
       </div>
     </div>
   )

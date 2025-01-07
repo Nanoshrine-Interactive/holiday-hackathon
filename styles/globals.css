@@ -203,6 +203,7 @@ body {
   align-items: center;
   justify-content: center;
   margin-top: 0.5rem;
+  margin-left: auto;
   transition: background-color 0.2s;
 }
 
@@ -362,6 +363,7 @@ body {
 }
 
 /* Create Post */
+/* Send Beam Container */
 .create-post-container {
   border: 1px solid #e5e7eb;
   border-radius: 0.25rem;
@@ -379,6 +381,87 @@ body {
   margin-bottom: 1rem;
 }
 
+/* Currency Selector */
+.beam-select-container {
+  margin-bottom: 1rem;
+}
+
+.beam-select-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.beam-currency-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.beam-currency-select:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.beam-currency-select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Amount Input */
+.beam-amount-container {
+  margin-bottom: 1rem;
+}
+
+.beam-amount-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.beam-amount-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.beam-amount-input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Essence Estimator */
+.essence-estimator {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f9fafb;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.essence-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.essence-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #8b5cf6;
+}
+
+/* Message Textarea */
 .create-post-textarea {
   width: 100%;
   min-height: 100px;
@@ -387,6 +470,7 @@ body {
   border-radius: 0.25rem;
   resize: vertical;
   transition: all 0.2s ease-in-out;
+  margin-bottom: 1rem;
 }
 
 .create-post-textarea:focus {
@@ -400,6 +484,7 @@ body {
   cursor: not-allowed;
 }
 
+/* File Upload */
 .file-upload-container {
   display: flex;
   align-items: center;
@@ -599,6 +684,85 @@ body {
   padding: 0.75rem 1rem;
   border-radius: 0.25rem;
   margin-bottom: 1rem;
+  animation: fadeIn 0.5s ease-out;
+}
+/* Create Beacon */
+.create-beacon-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+
+.create-beacon-canvas {
+  height: 480px;
+  width: 100%;
+}
+
+.create-beacon-title {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.create-beacon-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  background-color: #fef2f2;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.create-beacon-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  resize: vertical;
+  transition: all 0.2s ease-in-out;
+}
+
+.create-beacon-textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.create-beacon-textarea:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.create-beacon-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+}
+
+.create-beacon-button:hover {
+  background-color: #7c3aed;
+}
+
+.create-beacon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.create-beacon-success {
+  background-color: #ecfdf5;
+  color: #047857;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
   animation: fadeIn 0.5s ease-out;
 }
 

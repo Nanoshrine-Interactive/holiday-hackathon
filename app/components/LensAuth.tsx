@@ -14,6 +14,7 @@ import { EditProfile } from './EditLensProfile'
 import { storageClient } from '@/utils/storageClient'
 import { UserPostFeed } from './UserPostFeed'
 import { CreateBeacon } from './CreateBeacon'
+import SendBeam from './SendBeam'
 
 type AuthStatus = 'idle' | 'checking' | 'signing' | 'loading' | 'error'
 
@@ -28,7 +29,7 @@ export function LensAuth() {
   const [selectedAccount, setSelectedAccount] = useState<AccountMetadata | null>(null)
   const [loadingAccountId, setLoadingAccountId] = useState<string | null>(null)
   const [showCreateProfile, setShowCreateProfile] = useState(false)
-  const [activeTab, setActiveTab] = useState<'feed' | 'post' | 'edit'>('feed')
+  const [activeTab, setActiveTab] = useState<'feed' | 'post' | 'beacon' | 'edit'>('feed')
 
   // Existing clear auth state function
   const clearAuthState = useCallback(() => {
@@ -71,7 +72,7 @@ export function LensAuth() {
 
           if (!accountResult.isErr() && accountResult.value !== null) {
             const account = accountResult.value
-            console.log('Account data:', account)
+            // console.log('Account data:', account)
 
             return {
               __typename: 'AccountMetadata' as const,
@@ -310,6 +311,7 @@ export function LensAuth() {
                 {/* @ts-ignore */}
                 <div className="authenticated-profile-id">@{selectedAccount.handle}</div>
               </div>
+
               <button onClick={handleLogout} disabled={isLoading} className="logout-button">
                 {status === 'loading' ? (
                   <span className="account-button-loading">
@@ -327,19 +329,27 @@ export function LensAuth() {
                 )}
               </button>
             </div>
-
+            <div>
+              <span className="authenticated-profile-id">Essence:</span> 3020
+            </div>
             <div className="tabs-container">
               <button
                 className={`tab-button ${activeTab === 'feed' ? 'active' : ''}`}
                 onClick={() => setActiveTab('feed')}
               >
-                Feed
+                My Beacons
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'beacon' ? 'active' : ''}`}
+                onClick={() => setActiveTab('beacon')}
+              >
+                Create Beacon
               </button>
               <button
                 className={`tab-button ${activeTab === 'post' ? 'active' : ''}`}
                 onClick={() => setActiveTab('post')}
               >
-                Create Post
+                Send Beam
               </button>
               <button
                 className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
@@ -352,14 +362,18 @@ export function LensAuth() {
             <div className="tab-content">
               {activeTab === 'feed' && <UserPostFeed profileId={selectedAccount.id} />}
 
-              {activeTab === 'post' && (
+              {activeTab === 'beacon' && (
                 <CreateBeacon
                   profileId={selectedAccount.id}
+                  // @ts-ignore
+                  handle={selectedAccount.handle}
                   onSuccess={() => console.log('Beacon created!')}
                   onError={(error) => console.error('Error:', error)}
                 />
-                /*
-                <CreatePost
+              )}
+
+              {activeTab === 'post' && (
+                <SendBeam
                   profileId={selectedAccount.id}
                   onSuccess={() => {
                     console.log('Post created successfully')
@@ -367,7 +381,16 @@ export function LensAuth() {
                   onError={(error) => {
                     setError(error.message)
                   }}
-                /> */
+                />
+                /*<CreatePost
+                  profileId={selectedAccount.id}
+                  onSuccess={() => {
+                    console.log('Post created successfully')
+                  }}
+                  onError={(error) => {
+                    setError(error.message)
+                  }}
+                />*/
               )}
 
               {activeTab === 'edit' && (

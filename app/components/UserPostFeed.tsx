@@ -138,9 +138,6 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
         {/* Post Content */}
         {post.metadata?.content && <p className="post-content">{post.metadata.content}</p>}
 
-        {/* Timestamp */}
-        <div className="post-timestamp">{formatTimestamp(post.timestamp)}</div>
-
         {/* Post Stats */}
         <div className="post-stats">
           <span className="post-stat-item">
@@ -148,12 +145,12 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
             {post.stats?.comments || 0} Comments
           </span>
           <span className="post-stat-item">
-            <span className="post-stat-icon">🔁</span>
-            {post.stats?.reposts || 0} Reposts
+            <span className="post-stat-icon">🎛️</span>
+            Modify
           </span>
           <span className="post-stat-item">
-            <span className="post-stat-icon">❤️</span>
-            {post.stats?.upvotes || 0} Likes
+            <span className="post-stat-icon">✨</span>
+            {post.stats?.upvotes || 0} Mutations
           </span>
         </div>
       </div>
@@ -170,7 +167,7 @@ export function UserPostFeed({ profileId }: UserPostFeedProps) {
   // Render component
   return (
     <div className="post-feed-container">
-      <h3 className="post-feed-title">Your Posts</h3>
+      <h3 className="post-feed-title">My Beacons</h3>
 
       {/* Error State */}
       {error && <div className="post-feed-error">{error}</div>}

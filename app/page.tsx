@@ -20,7 +20,7 @@ function App() {
       {account.status === 'connected' && (
         <div className="lens-app-section">
           <div className="lens-app-header">
-            <h2 className="lens-app-title">NSI :: App</h2> <ConnectKitButton />
+            <h2 className="lens-app-title">forward.lens</h2> <ConnectKitButton />
           </div>
           <LensAuth />
         </div>
