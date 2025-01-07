@@ -15,6 +15,7 @@ const formatAddress = (address: string): `0x${string}` => {
 type StorageClientType = ReturnType<typeof StorageClient.create>
 
 // Export modified client that maintains original functionality
+//@ts-ignore
 export const storageClient: StorageClientType & {
   uploadFile: (file: File, address?: string) => Promise<{ uri: string }>
   uploadAsJson: (data: any, address?: string) => Promise<{ uri: string }>
