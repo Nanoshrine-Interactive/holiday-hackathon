@@ -13,6 +13,7 @@ import CreateLensProfile from './CreateLensProfile'
 import { EditProfile } from './EditLensProfile'
 import { storageClient } from '@/utils/storageClient'
 import { UserPostFeed } from './UserPostFeed'
+import { CreateBeacon } from './CreateBeacon'
 
 type AuthStatus = 'idle' | 'checking' | 'signing' | 'loading' | 'error'
 
@@ -352,6 +353,12 @@ export function LensAuth() {
               {activeTab === 'feed' && <UserPostFeed profileId={selectedAccount.id} />}
 
               {activeTab === 'post' && (
+                <CreateBeacon
+                  profileId={selectedAccount.id}
+                  onSuccess={() => console.log('Beacon created!')}
+                  onError={(error) => console.error('Error:', error)}
+                />
+                /*
                 <CreatePost
                   profileId={selectedAccount.id}
                   onSuccess={() => {
@@ -360,7 +367,7 @@ export function LensAuth() {
                   onError={(error) => {
                     setError(error.message)
                   }}
-                />
+                /> */
               )}
 
               {activeTab === 'edit' && (
