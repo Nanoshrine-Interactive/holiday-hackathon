@@ -12,7 +12,7 @@ function App() {
     <div className="app-container">
       {account.status !== 'connected' && (
         <div className="lens-app-section">
-          <h3 className="lens-app-title">Welcome to NSI!</h3>
+          <h3 className="lens-app-title">Welcome to forward.lens!</h3>
           <p>Please connect a wallet on the Lens Network Sepolia Testnet</p>
           <ConnectKitButton />
         </div>

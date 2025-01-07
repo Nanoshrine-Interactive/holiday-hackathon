@@ -4,7 +4,7 @@ import '../styles/globals.css'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
-  title: 'NSI :: Lens',
+  title: 'NSI :: forward.lens',
   description: 'TDB'
 }
 
