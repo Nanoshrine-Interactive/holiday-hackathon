@@ -40,7 +40,7 @@ export function CreateBeacon({ profileId, handle, onSuccess, onError }: CreateBe
     }
   }, [successMessage])
 
-  // NOTE:: These external lib links could be on-chain instead!
+  // NOTE :: These external lib links could be on-chain instead!
   const createSceneHTML = () => {
     return `<!DOCTYPE html>
       <html>
