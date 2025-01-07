@@ -1,9 +1,10 @@
 # Hello!
 
-I ended up joining very late and only worked on this for a day or so.
-Even though it's missing most of the features I felt I should still share the full idea.
+I joined super late, but still wanted to explore the protocol.
 
-Video Demo and WWeb3 rant: TDB
+I almost finished the 3D scene beacon storage node uploading but ran into CORS issues. I was aiming to have a fully hosted R3F scene completely on-chain, no external dep. Even though it's missing most of the features I felt I should still share the full concept.
+
+**Video Demo and rant:** [CLICK ME](https://www.youtube.com/watch?v=VOotGqwAxy0)
 
 # Forward.lens
 
