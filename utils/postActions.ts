@@ -4,7 +4,7 @@ import { lensClient } from './lensClient'
 import { storageClient } from './storageClient'
 import { handleWith } from '@lens-protocol/client/viem'
 
-export async function createPost(content: string, signer: any) {
+export async function createPost(content: string, signer: any, address: string) {
   try {
     // Resume session
     const resumed = await lensClient.resumeSession()
@@ -19,7 +19,7 @@ export async function createPost(content: string, signer: any) {
     })
 
     // Upload metadata to Lens storage node
-    const { uri } = await storageClient.uploadAsJson(metadata)
+    const { uri } = await storageClient.uploadAsJson(metadata, address)
 
     // Create the post
     const result = await post(sessionClient, {

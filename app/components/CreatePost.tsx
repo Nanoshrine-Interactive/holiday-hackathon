@@ -96,7 +96,7 @@ export function CreatePost({ profileId, onSuccess, onError }: CreatePostProps) {
       // Prepare media if uploaded
       let mediaUri = null
       if (formData.media) {
-        const mediaResult = await storageClient.uploadFile(formData.media)
+        const mediaResult = await storageClient.uploadFile(formData.media, address)
         mediaUri = mediaResult.uri
       }
 
@@ -107,7 +107,7 @@ export function CreatePost({ profileId, onSuccess, onError }: CreatePostProps) {
       })
 
       // Upload metadata
-      const { uri } = await storageClient.uploadAsJson(metadata)
+      const { uri } = await storageClient.uploadAsJson(metadata, address)
       console.log('Metadata uploaded:', uri)
 
       // Create post

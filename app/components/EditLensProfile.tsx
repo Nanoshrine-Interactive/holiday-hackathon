@@ -68,7 +68,7 @@ export function EditProfile({ currentProfile, onSuccess, onError }: EditProfileP
       // Prepare account metadata using the official helper
       let picture = null
       if (formData.picture) {
-        const imageResult = await storageClient.uploadFile(formData.picture)
+        const imageResult = await storageClient.uploadFile(formData.picture, address)
         picture = imageResult.uri
       }
 
@@ -79,7 +79,7 @@ export function EditProfile({ currentProfile, onSuccess, onError }: EditProfileP
       })
 
       // Upload metadata
-      const { uri } = await storageClient.uploadAsJson(metadata)
+      const { uri } = await storageClient.uploadAsJson(metadata, address)
       console.log('Metadata uploaded:', uri)
 
       // Get the typed data
