@@ -1,6 +1,7 @@
 # Hello!
 
-I ended up joining very late and only worked on it for a day or so. Even though it's missing most of the features I felt I should still share the full idea.
+I ended up joining very late and only worked on this for a day or so.
+Even though it's missing most of the features I felt I should still share the full idea.
 
 Video Demo and WWeb3 rant: TDB
 
